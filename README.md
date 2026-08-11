@@ -10,6 +10,7 @@ Sistema de gerenciamento de chamados (tickets) de suporte, construído como API 
 
 - [O problema](#o-problema)
 - [A solução](#a-solução)
+- [Telas](#telas)
 - [Funcionalidades](#funcionalidades)
 - [Tecnologias](#tecnologias)
 - [Como instalar](#como-instalar)
@@ -52,6 +53,40 @@ O que diferencia este projeto de um CRUD:
 1. **Máquina de estados** — o ticket não é um registro editável livremente. `FECHADO → ABERTO` retorna `409 Conflict`.
 2. **Autorização contextual** — não basta "é CLIENTE?"; a pergunta real é "é dono **deste** ticket?".
 3. **Auditabilidade** — mensagens não são apagadas, datas de resolução e fechamento são carimbadas, usuários com histórico são desativados em vez de excluídos.
+
+---
+
+## Telas
+
+### Documentação interativa — `/api/docs`
+
+OpenAPI 3.0 escrita à mão. Dá para autenticar e chamar qualquer endpoint direto do navegador.
+
+![Swagger UI com os endpoints de tickets](docs/img/05-swagger.png)
+
+### Fila de chamados
+
+Ordenação por prioridade (urgentes primeiro), filtros combináveis por status, prioridade e categoria, busca textual e paginação.
+
+![Lista de chamados vista pelo admin](docs/img/02-chamados.png)
+
+### A mesma tela, vista por um cliente
+
+Comparando com a imagem acima: **3 chamados em vez de 5** e o menu sem Dashboard, Categorias e Usuários. O recorte não é feito no frontend — o service filtra por dono antes de o SQL rodar, e o menu apenas reflete isso.
+
+![Lista de chamados vista pelo cliente](docs/img/06-cliente.png)
+
+### Detalhe do chamado
+
+Conversa completa, notas internas marcadas, e as ações disponíveis calculadas a partir do status atual e do papel de quem está olhando.
+
+![Detalhe do chamado com a conversa e as ações](docs/img/03-detalhe.png)
+
+### Dashboard
+
+Agregações em SQL: totais por status, taxa de resolução, tempo médio via `TIMESTAMPDIFF`, distribuição por categoria e desempenho por atendente.
+
+![Dashboard com as métricas da operação](docs/img/04-dashboard.png)
 
 ---
 

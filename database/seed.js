@@ -14,12 +14,12 @@ import { hashPassword } from '../src/utils/password.js';
 const DEMO_PASSWORD = 'Senha@123';
 
 const CATEGORIES = [
-  ['Problema tecnico', 'Falhas, erros e indisponibilidade do sistema'],
-  ['Pagamento', 'Cobrancas, faturas, estornos e reembolsos'],
+  ['Problema técnico', 'Falhas, erros e indisponibilidade do sistema'],
+  ['Pagamento', 'Cobranças, faturas, estornos e reembolsos'],
   ['Entrega', 'Prazos, rastreio e extravio de pedidos'],
   ['Conta', 'Acesso, cadastro, senha e dados pessoais'],
-  ['Produto', 'Duvidas e defeitos sobre produtos'],
-  ['Outros', 'Assuntos que nao se encaixam nas demais categorias'],
+  ['Produto', 'Dúvidas e defeitos sobre produtos'],
+  ['Outros', 'Assuntos que não se encaixam nas demais categorias'],
 ];
 
 const USERS = [
@@ -70,61 +70,61 @@ async function seed() {
     // --- tickets -----------------------------------------------------------
     const tickets = [
       {
-        title: 'Meu pedido ainda nao chegou',
+        title: 'Meu pedido ainda não chegou',
         description:
-          'Comprei no dia 02 e o prazo era de 3 dias uteis. O rastreio nao atualiza desde sexta.',
+          'Comprei no dia 02 e o prazo era de 3 dias úteis. O rastreio não atualiza desde sexta.',
         status: 'EM_ATENDIMENTO',
         priority: 'ALTA',
         category: 'Entrega',
         client: 'diego@cliente.com',
         agent: 'bruno@helpdesk.com',
         messages: [
-          ['diego@cliente.com', 'Meu pedido ainda nao chegou.', 0],
-          ['bruno@helpdesk.com', 'Ola! Vou verificar o status do pedido.', 0],
-          ['bruno@helpdesk.com', 'Transportadora reportou atraso na regiao.', 1],
+          ['diego@cliente.com', 'Meu pedido ainda não chegou.', 0],
+          ['bruno@helpdesk.com', 'Olá! Vou verificar o status do pedido.', 0],
+          ['bruno@helpdesk.com', 'Transportadora reportou atraso na região.', 1],
           ['diego@cliente.com', 'Obrigado.', 0],
         ],
       },
       {
-        title: 'Cobranca duplicada no cartao',
+        title: 'Cobrança duplicada no cartão',
         description: 'Fui cobrado duas vezes pelo mesmo pedido #8842.',
         status: 'ABERTO',
         priority: 'URGENTE',
         category: 'Pagamento',
         client: 'elisa@cliente.com',
         agent: null,
-        messages: [['elisa@cliente.com', 'Preciso do estorno com urgencia.', 0]],
+        messages: [['elisa@cliente.com', 'Preciso do estorno com urgência.', 0]],
       },
       {
-        title: 'Nao consigo redefinir minha senha',
-        description: 'O email de recuperacao nunca chega na minha caixa.',
+        title: 'Não consigo redefinir minha senha',
+        description: 'O e-mail de recuperação nunca chega na minha caixa.',
         status: 'RESOLVIDO',
         priority: 'MEDIA',
         category: 'Conta',
         client: 'diego@cliente.com',
         agent: 'carla@helpdesk.com',
         messages: [
-          ['diego@cliente.com', 'O email de recuperacao nao chega.', 0],
+          ['diego@cliente.com', 'O e-mail de recuperação não chega.', 0],
           ['carla@helpdesk.com', 'Estava caindo no spam. Reenviei, confere?', 0],
           ['diego@cliente.com', 'Chegou! Consegui trocar a senha.', 0],
         ],
       },
       {
-        title: 'Sistema fora do ar pela manha',
-        description: 'Das 09h as 09h40 o painel retornava erro 500.',
+        title: 'Sistema fora do ar pela manhã',
+        description: 'Das 09h às 09h40 o painel retornava erro 500.',
         status: 'FECHADO',
         priority: 'URGENTE',
-        category: 'Problema tecnico',
+        category: 'Problema técnico',
         client: 'elisa@cliente.com',
         agent: 'bruno@helpdesk.com',
         messages: [
-          ['elisa@cliente.com', 'O painel esta retornando erro 500.', 0],
+          ['elisa@cliente.com', 'O painel está retornando erro 500.', 0],
           ['bruno@helpdesk.com', 'Incidente identificado e corrigido.', 0],
         ],
       },
       {
-        title: 'Duvida sobre garantia do produto',
-        description: 'A garantia cobre defeito de fabrica apos 6 meses?',
+        title: 'Dúvida sobre garantia do produto',
+        description: 'A garantia cobre defeito de fábrica após 6 meses?',
         status: 'ABERTO',
         priority: 'BAIXA',
         category: 'Produto',

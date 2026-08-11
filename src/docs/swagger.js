@@ -26,12 +26,12 @@ const idParam = {
 
 /** Respostas de erro reaproveitadas por quase todos os endpoints. */
 const errorResponses = {
-  400: { description: 'Requisicao invalida', content: errorContent() },
-  401: { description: 'Nao autenticado (token ausente, invalido ou expirado)', content: errorContent() },
-  403: { description: 'Autenticado, mas sem permissao para esta acao', content: errorContent() },
-  404: { description: 'Recurso nao encontrado', content: errorContent() },
-  409: { description: 'Conflito com o estado atual (ex.: transicao de status invalida)', content: errorContent() },
-  422: { description: 'Falha de validacao dos dados enviados', content: errorContent() },
+  400: { description: 'Requisição inválida', content: errorContent() },
+  401: { description: 'Não autenticado (token ausente, inválido ou expirado)', content: errorContent() },
+  403: { description: 'Autenticado, mas sem permissão para esta ação', content: errorContent() },
+  404: { description: 'Recurso não encontrado', content: errorContent() },
+  409: { description: 'Conflito com o estado atual (ex.: transição de status inválida)', content: errorContent() },
+  422: { description: 'Falha de validação dos dados enviados', content: errorContent() },
 };
 
 function errorContent() {
@@ -55,8 +55,8 @@ export const swaggerSpec = {
       '2. Copie o `data.token` da resposta.',
       '3. Clique em **Authorize** (cadeado no topo) e cole o token.',
       '',
-      '### Usuarios de demonstracao (senha: `Senha@123`)',
-      '| Email | Perfil |',
+      '### Usuários de demonstração (senha: `Senha@123`)',
+      '| E-mail | Perfil |',
       '|---|---|',
       '| admin@helpdesk.com | ADMIN |',
       '| bruno@helpdesk.com | ATENDENTE |',
@@ -65,20 +65,20 @@ export const swaggerSpec = {
       '### Fluxo de status',
       '`ABERTO -> EM_ATENDIMENTO -> RESOLVIDO -> FECHADO`',
       '',
-      'Transicoes fora desse fluxo retornam **409 Conflict**. `FECHADO` e final.',
+      'Transições fora desse fluxo retornam **409 Conflict**. `FECHADO` é final.',
     ].join('\n'),
-    contact: { name: 'Repositorio', url: 'https://github.com/seu-usuario/helpdesk-api' },
+    contact: { name: 'Repositório', url: 'https://github.com/CaioCodes1/helpdesk-api' },
     license: { name: 'MIT' },
   },
   servers: [{ url: `http://localhost:${env.port}`, description: 'Ambiente local' }],
   tags: [
-    { name: 'Health', description: 'Verificacao de disponibilidade' },
+    { name: 'Health', description: 'Verificação de disponibilidade' },
     { name: 'Auth', description: 'Cadastro, login e perfil' },
     { name: 'Tickets', description: 'Ciclo de vida dos chamados' },
-    { name: 'Mensagens', description: 'Historico de conversa de um ticket' },
-    { name: 'Categorias', description: 'Configuracao de categorias (ADMIN)' },
-    { name: 'Usuarios', description: 'Gestao de usuarios e permissoes (ADMIN)' },
-    { name: 'Dashboard', description: 'Metricas e indicadores' },
+    { name: 'Mensagens', description: 'Histórico de conversa de um ticket' },
+    { name: 'Categorias', description: 'Configuração de categorias (ADMIN)' },
+    { name: 'Usuários', description: 'Gestão de usuários e permissões (ADMIN)' },
+    { name: 'Dashboard', description: 'Métricas e indicadores' },
   ],
 
   components: {
@@ -225,7 +225,7 @@ export const swaggerSpec = {
     '/api/health': {
       get: {
         tags: ['Health'],
-        summary: 'Verifica se a API e o banco estao no ar',
+        summary: 'Verifica se a API e o banco estão no ar',
         security: [],
         responses: {
           200: { description: 'Aplicacao saudavel' },
@@ -237,7 +237,7 @@ export const swaggerSpec = {
     '/api/auth/register': {
       post: {
         tags: ['Auth'],
-        summary: 'Cadastra um novo usuario (sempre com perfil CLIENTE)',
+        summary: 'Cadastra um novo usuário (sempre com perfil CLIENTE)',
         description:
           'A role NAO pode ser enviada: o cadastro publico cria apenas CLIENTE. ' +
           'Promocoes acontecem em PATCH /api/users/{id}/role.',
@@ -310,7 +310,7 @@ export const swaggerSpec = {
     '/api/auth/me': {
       get: {
         tags: ['Auth'],
-        summary: 'Dados do usuario autenticado',
+        summary: 'Dados do usuário autenticado',
         security: bearerAuth,
         responses: { 200: { description: 'Perfil do usuario' }, ...pick(401) },
       },
@@ -319,7 +319,7 @@ export const swaggerSpec = {
     '/api/auth/password': {
       patch: {
         tags: ['Auth'],
-        summary: 'Altera a propria senha',
+        summary: 'Altera a própria senha',
         security: bearerAuth,
         requestBody: {
           required: true,
@@ -343,7 +343,7 @@ export const swaggerSpec = {
     '/api/tickets': {
       get: {
         tags: ['Tickets'],
-        summary: 'Lista tickets (escopo automatico por perfil)',
+        summary: 'Lista tickets (escopo automático por perfil)',
         description:
           'CLIENTE recebe apenas os proprios tickets - o filtro e forcado no servidor. ' +
           'ATENDENTE e ADMIN veem todos. Ordenacao padrao: prioridade URGENTE primeiro.',
@@ -451,7 +451,7 @@ export const swaggerSpec = {
       },
       put: {
         tags: ['Tickets'],
-        summary: 'Edita titulo/descricao/categoria/prioridade',
+        summary: 'Edita título/descrição/categoria/prioridade',
         description:
           'CLIENTE so edita titulo e descricao, e somente enquanto o status for ABERTO.',
         security: bearerAuth,
@@ -487,7 +487,7 @@ export const swaggerSpec = {
     '/api/tickets/{id}/status': {
       patch: {
         tags: ['Tickets'],
-        summary: 'Altera o status respeitando a maquina de estados',
+        summary: 'Altera o status respeitando a máquina de estados',
         description:
           'Transicoes validas:\n' +
           '- ABERTO -> EM_ATENDIMENTO, FECHADO\n' +
@@ -545,7 +545,7 @@ export const swaggerSpec = {
     '/api/tickets/{id}/assign': {
       patch: {
         tags: ['Tickets'],
-        summary: 'Atribui ou remove o atendente responsavel',
+        summary: 'Atribui ou remove o atendente responsável',
         description:
           '`agentId: null` devolve o ticket para a fila. ATENDENTE so atribui a si mesmo; ' +
           'apenas ADMIN reatribui para terceiros. O responsavel nunca pode ter role CLIENTE.',
@@ -581,7 +581,7 @@ export const swaggerSpec = {
     '/api/tickets/{id}/messages': {
       get: {
         tags: ['Mensagens'],
-        summary: 'Historico de mensagens do ticket',
+        summary: 'Histórico de mensagens do ticket',
         description: 'Notas internas (`isInternal: true`) nunca aparecem para CLIENTE.',
         security: bearerAuth,
         parameters: [idParam, ...paginationParams],
@@ -721,8 +721,8 @@ export const swaggerSpec = {
 
     '/api/users': {
       get: {
-        tags: ['Usuarios'],
-        summary: 'Lista usuarios (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Lista usuários (ADMIN)',
         security: bearerAuth,
         parameters: [
           ...paginationParams,
@@ -733,8 +733,8 @@ export const swaggerSpec = {
         responses: { 200: { description: 'Lista paginada' }, ...pick(401, 403) },
       },
       post: {
-        tags: ['Usuarios'],
-        summary: 'Cria um usuario com role definida (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Cria um usuário com perfil definido (ADMIN)',
         security: bearerAuth,
         requestBody: {
           required: true,
@@ -759,8 +759,8 @@ export const swaggerSpec = {
 
     '/api/users/agents': {
       get: {
-        tags: ['Usuarios'],
-        summary: 'Lista atendentes e admins ativos (para a tela de atribuicao)',
+        tags: ['Usuários'],
+        summary: 'Lista atendentes e admins ativos (para a tela de atribuição)',
         security: bearerAuth,
         responses: { 200: { description: 'Lista de atendentes' }, ...pick(401, 403) },
       },
@@ -768,15 +768,15 @@ export const swaggerSpec = {
 
     '/api/users/{id}': {
       get: {
-        tags: ['Usuarios'],
-        summary: 'Detalha um usuario (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Detalha um usuário (ADMIN)',
         security: bearerAuth,
         parameters: [idParam],
         responses: { 200: { description: 'Usuario' }, ...pick(401, 403, 404) },
       },
       put: {
-        tags: ['Usuarios'],
-        summary: 'Edita um usuario (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Edita um usuário (ADMIN)',
         security: bearerAuth,
         parameters: [idParam],
         requestBody: {
@@ -798,8 +798,8 @@ export const swaggerSpec = {
         responses: { 200: { description: 'Usuario atualizado' }, ...pick(400, 401, 403, 404, 409, 422) },
       },
       delete: {
-        tags: ['Usuarios'],
-        summary: 'Remove ou desativa um usuario (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Remove ou desativa um usuário (ADMIN)',
         description:
           'Com tickets vinculados, o usuario e apenas desativado para preservar o historico.',
         security: bearerAuth,
@@ -814,8 +814,8 @@ export const swaggerSpec = {
 
     '/api/users/{id}/role': {
       patch: {
-        tags: ['Usuarios'],
-        summary: 'Altera a permissao de um usuario (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Altera a permissão de um usuário (ADMIN)',
         description: 'Bloqueado se a operacao deixaria o sistema sem nenhum ADMIN ativo.',
         security: bearerAuth,
         parameters: [idParam],
@@ -839,8 +839,8 @@ export const swaggerSpec = {
 
     '/api/users/{id}/password': {
       patch: {
-        tags: ['Usuarios'],
-        summary: 'Redefine a senha de um usuario (ADMIN)',
+        tags: ['Usuários'],
+        summary: 'Redefine a senha de um usuário (ADMIN)',
         security: bearerAuth,
         parameters: [idParam],
         requestBody: {
@@ -862,7 +862,7 @@ export const swaggerSpec = {
     '/api/dashboard': {
       get: {
         tags: ['Dashboard'],
-        summary: 'Indicadores gerais da operacao (ADMIN)',
+        summary: 'Indicadores gerais da operação (ADMIN)',
         description:
           'Retorna: totais por status, por prioridade, por categoria, por atendente, ' +
           'tempo medio de resolucao, taxa de resolucao, serie diaria e atendente destaque.',
@@ -882,7 +882,7 @@ export const swaggerSpec = {
     '/api/dashboard/me': {
       get: {
         tags: ['Dashboard'],
-        summary: 'Metricas pessoais do atendente logado',
+        summary: 'Métricas pessoais do atendente logado',
         security: bearerAuth,
         responses: { 200: { description: 'Metricas pessoais' }, ...pick(401, 403) },
       },

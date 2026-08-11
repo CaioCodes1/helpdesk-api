@@ -118,7 +118,7 @@ HTML/CSS/JS puro, sem framework: login e cadastro, lista de chamados com filtros
 - [ ] **Testes de integração automatizados** — Supertest + banco de teste, transformando o roteiro manual de 77 verificações em `npm test`
 - [ ] **Docker Compose** (API + MySQL) para subir com um comando
 - [ ] **CI no GitHub Actions** rodando lint e testes em cada push
-- [ ] **Screenshots no README**
+- [x] **Screenshots no README** — capturados em `docs/img/`
 
 ### Médio prazo
 

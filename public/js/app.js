@@ -14,6 +14,13 @@ const STATUS_LABEL = {
   FECHADO: 'Fechado',
 };
 
+const PRIORITY_LABEL = {
+  BAIXA: 'Baixa',
+  MEDIA: 'Média',
+  ALTA: 'Alta',
+  URGENTE: 'Urgente',
+};
+
 const state = {
   user: null,
   view: 'tickets',
@@ -58,7 +65,7 @@ function statusBadge(status) {
 }
 
 function priorityTag(priority) {
-  return `<span class="prio prio-${priority}">${priority.charAt(0) + priority.slice(1).toLowerCase()}</span>`;
+  return `<span class="prio prio-${priority}">${PRIORITY_LABEL[priority] || priority}</span>`;
 }
 
 const isStaff = () => ['ATENDENTE', 'ADMIN'].includes(state.user?.role);
@@ -248,7 +255,7 @@ async function renderTicketList() {
         <select id="f-priority">
           <option value="">Todas</option>
           ${['URGENTE', 'ALTA', 'MEDIA', 'BAIXA']
-            .map((p) => `<option value="${p}" ${filters.priority === p ? 'selected' : ''}>${p}</option>`)
+            .map((p) => `<option value="${p}" ${filters.priority === p ? 'selected' : ''}>${PRIORITY_LABEL[p]}</option>`)
             .join('')}
         </select>
       </label>
@@ -440,7 +447,7 @@ function renderActions(ticket) {
       <label>Prioridade
         <select data-action="priority">
           ${['BAIXA', 'MEDIA', 'ALTA', 'URGENTE']
-            .map((p) => `<option value="${p}" ${ticket.priority === p ? 'selected' : ''}>${p}</option>`)
+            .map((p) => `<option value="${p}" ${ticket.priority === p ? 'selected' : ''}>${PRIORITY_LABEL[p]}</option>`)
             .join('')}
         </select>
       </label>`);

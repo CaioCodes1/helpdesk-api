@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Help Desk</title>
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127903;</text></svg>" />
+</head>
+<body>
+  <!-- ===================== TELA DE AUTENTICACAO ===================== -->
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-card">
+      <div class="auth-brand">
+        <span class="auth-logo">HD</span>
+        <div>
+          <h1>Help Desk</h1>
+          <p>Sistema de gerenciamento de chamados</p>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-auth-tab="login">Entrar</button>
+        <button class="tab" data-auth-tab="register">Criar conta</button>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <label>E-mail<input type="email" name="email" required placeholder="voce@empresa.com" /></label>
+        <label>Senha<input type="password" name="password" required placeholder="••••••••" /></label>
+        <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+      </form>
+
+      <form id="register-form" class="auth-form hidden">
+        <label>Nome<input type="text" name="name" required minlength="3" placeholder="Seu nome completo" /></label>
+        <label>E-mail<input type="email" name="email" required placeholder="voce@empresa.com" /></label>
+        <label>Senha
+          <input type="password" name="password" required placeholder="••••••••" />
+          <small>Mínimo 8 caracteres, com maiúscula, minúscula e número.</small>
+        </label>
+        <button type="submit" class="btn btn-primary btn-block">Criar conta</button>
+      </form>
+
+      <div class="demo-users">
+        <p>Contas de demonstração <span>(senha: Senha@123)</span></p>
+        <div class="demo-grid">
+          <button class="demo-btn" data-email="admin@helpdesk.com"><b>Admin</b>admin@helpdesk.com</button>
+          <button class="demo-btn" data-email="bruno@helpdesk.com"><b>Atendente</b>bruno@helpdesk.com</button>
+          <button class="demo-btn" data-email="diego@cliente.com"><b>Cliente</b>diego@cliente.com</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== APLICACAO ===================== -->
+  <div id="app-screen" class="app-screen hidden">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><span class="auth-logo">HD</span> Help Desk</div>
+
+      <nav id="main-nav">
+        <button class="nav-item active" data-view="tickets">Chamados</button>
+        <button class="nav-item" data-view="new-ticket" data-role="CLIENTE,ADMIN">Novo chamado</button>
+        <button class="nav-item" data-view="dashboard" data-role="ADMIN,ATENDENTE">Dashboard</button>
+        <button class="nav-item" data-view="categories" data-role="ADMIN">Categorias</button>
+        <button class="nav-item" data-view="users" data-role="ADMIN">Usuários</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="/api/docs" target="_blank" rel="noopener" class="doc-link">Documentação da API</a>
+        <div class="user-box">
+          <div class="avatar" id="user-avatar">?</div>
+          <div class="user-info">
+            <strong id="user-name">—</strong>
+            <span class="badge" id="user-role">—</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="btn btn-ghost btn-block">Sair</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div id="view-container"></div>
+    </main>
+  </div>
+
+  <div id="toast-area" class="toast-area"></div>
+  <div id="modal-root"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>

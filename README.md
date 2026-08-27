@@ -145,6 +145,8 @@ Agregações em SQL: totais por status, taxa de resolução, tempo médio via `T
 | Segurança | `helmet`, `cors`, `express-rate-limit` | Headers seguros, controle de origem, anti brute force |
 | Docs | `swagger-ui-express` | Documentação executável no navegador |
 | Testes | `node:test` | Sem dependência extra de framework |
+| Automação | **n8n** (self-hosted) | Orquestra o fluxo de triagem sem servidor extra |
+| IA | **Ollama** + `qwen2.5:7b` | Roda **local**: custo zero e nenhum dado de cliente sai da máquina |
 
 **Sem ORM, de propósito.** Ver [Decisões técnicas](#decisões-técnicas).
 
@@ -436,7 +438,9 @@ Três coisas que essa camada ensinou, e que estão documentadas em detalhe no [R
 - [ ] Tabela de auditoria com histórico completo de transições
 - [ ] WebSocket para atualização da conversa em tempo real
 - [ ] Testes de integração automatizados com Supertest + banco de teste
-- [ ] Docker Compose (API + MySQL) e pipeline de CI
+- [x] ~~Docker Compose (API + MySQL)~~ — ver [`docker-compose.yml`](docker-compose.yml)
+- [ ] Pipeline de CI
+- [ ] **Automação v2:** o ticket dispara o evento ao nascer, pelo padrão *outbox*, em vez do n8n consultar a fila de 5 em 5 minutos
 - [ ] Cache de dashboard em Redis
 - [ ] Migração para TypeScript
 

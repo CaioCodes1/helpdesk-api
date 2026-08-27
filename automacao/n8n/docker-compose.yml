@@ -1,0 +1,58 @@
+# n8n local para desenvolvimento das automações.
+#
+# Subir:   docker compose up -d
+# Abrir:   http://localhost:5678
+# Parar:   docker compose down          (os workflows ficam salvos no volume)
+# Apagar:  docker compose down -v       (APAGA os workflows — cuidado)
+#
+# ATENÇÃO — como o n8n enxerga a API do helpdesk:
+#   O helpdesk roda no Windows (host), na porta 3000. O n8n roda dentro do
+#   container. De dentro do container, "localhost" é o PRÓPRIO CONTAINER, não
+#   o seu PC — usar http://localhost:3000 num node HTTP Request dá
+#   ECONNREFUSED, e é o erro nº 1 de quem começa.
+#
+#   O endereço certo, no Docker Desktop para Windows:
+#       http://host.docker.internal:3000/api/...
+#
+#   Vale a pena guardar isso numa variável do n8n (Settings > Variables) ou
+#   numa credencial, para não repetir a URL em cada node.
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      # Fuso — sem isto, o trigger Schedule roda em UTC e o "relatório das 8h"
+      # sai às 5h. É a pegadinha mais comum de agendamento.
+      - GENERIC_TIMEZONE=America/Sao_Paulo
+      - TZ=America/Sao_Paulo
+
+      # Acesso por http://localhost sem TLS. Só para desenvolvimento local;
+      # num VPS isto sai e entra HTTPS de verdade.
+      - N8N_SECURE_COOKIE=false
+
+      # Silencia o aviso de permissão do arquivo de config no volume.
+      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
+
+      # Guarda credenciais criptografadas com uma chave fixa: sem isto o n8n
+      # gera uma chave aleatória, e recriar o container invalida TODAS as
+      # credenciais salvas. Esta foi gerada em 26/08/2026 — se mudar, todas as
+      # credenciais já salvas no n8n param de abrir.
+      - N8N_ENCRYPTION_KEY=e15b3ef42760f0d0ce3d93fea7502e82a5a6f2e243d11b4cb1b4c401e44af769
+
+    volumes:
+      # Banco SQLite interno + workflows + credenciais.
+      - n8n_data:/home/node/.n8n
+      # Pasta compartilhada, caso um node Code precise ler/gravar arquivo.
+      - ./files:/files
+
+    extra_hosts:
+      # Redundante no Docker Desktop (já vem resolvido), mas deixa o compose
+      # portátil para Linux, onde host.docker.internal NÃO existe por padrão.
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  n8n_data:

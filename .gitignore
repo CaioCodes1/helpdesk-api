@@ -8,3 +8,11 @@ coverage/
 Thumbs.db
 .vscode/
 .idea/
+
+# ---------------------------------------------------------------------------
+# Automacao: o workflow real guarda a senha do bot e a URL do webhook do
+# Discord em texto puro. A URL funciona como senha - quem tiver ela posta no
+# canal. Versionamos apenas o .example.json, com placeholders.
+# ---------------------------------------------------------------------------
+automacao/n8n/workflow-triagem-helpdesk.json
+automacao/n8n/files/

@@ -2,6 +2,11 @@
 
 Sistema de gerenciamento de chamados (tickets) de suporte, construído como API REST em Node.js + Express + MySQL, com autenticação JWT e autorização baseada em papéis.
 
+**O projeto tem duas camadas:**
+
+1. **A API** — o ticket como objeto com estado, dono e histórico, com 24 regras de negócio.
+2. **A [triagem automática com IA](automacao/README.md)** — um LLM rodando **local** classifica categoria e prioridade dos chamados que entram na fila, escreve um resumo como nota interna e avisa a equipe no Discord. Custo zero, sem chave de API paga.
+
 > Projeto de portfólio com foco em **backend**. O frontend existe para demonstrar a API funcionando, mas as decisões técnicas relevantes estão no servidor.
 
 ---
@@ -20,6 +25,7 @@ Sistema de gerenciamento de chamados (tickets) de suporte, construído como API 
 - [Regras de negócio](#regras-de-negócio-implementadas)
 - [Decisões técnicas](#decisões-técnicas)
 - [Testes](#testes)
+- [Triagem automática com IA](#triagem-automática-com-ia)
 - [Melhorias futuras](#melhorias-futuras)
 
 ---
@@ -401,6 +407,25 @@ npm test
 A API também foi validada por um roteiro de 77 verificações de integração cobrindo autenticação, autorização por papel, escopo de visibilidade, transições de status, notas internas, filtros, tentativas de SQL injection e o dashboard.
 
 ---
+
+## Triagem automática com IA
+
+Um chamado novo cai na fila e fica lá até alguém abrir, ler e decidir categoria e prioridade. Enquanto isso, um cliente cobrado em duplicidade espera do lado de uma dúvida sobre garantia — porque ninguém ainda olhou.
+
+A pasta [`automacao/`](automacao/README.md) traz uma camada que faz essa leitura em segundos, **sem tomar a decisão**: classifica, resume, avisa a equipe — e deixa o ticket na fila para um humano assumir.
+
+**n8n** (self-hosted) · **Ollama** + `qwen2.5:7b` rodando local · **Discord webhook** · **custo R$ 0**
+
+```bash
+node automacao/testes/testa-validador.js   # 15 casos do portão de validação
+node automacao/testes/audita-workflow.js   # 23 verificações de configuração
+```
+
+Três coisas que essa camada ensinou, e que estão documentadas em detalhe no [README dela](automacao/README.md):
+
+- **A regra 20 quase virou um sequestro de tickets.** Atendente que responde publicamente um ticket `ABERTO` sem dono **assume** o ticket — e o bot é atendente. Sem `isInternal: true`, cada triagem tiraria o chamado da fila e marcaria um robô como responsável, sem um único erro no log.
+- **A primeira rubrica de prioridade media a coisa errada.** Foi escrita com critérios de suporte interno de TI ("quantas pessoas param de trabalhar") para um help desk de **atendimento ao cliente**. O modelo a aplicou corretamente e classificou "cobrança duplicada" como BAIXA. O erro era invisível nos testes porque os casos de teste foram inventados com a mesma régua torta.
+- **Um bug de inanição da fila, 100% silencioso.** Como o bot não assume o ticket, chamado já triado continua aparecendo na busca. Quando chegaram a 20, ocuparam todos os slots e os novos nunca mais foram alcançados — com todas as execuções marcadas como `success`.
 
 ## Melhorias futuras
 

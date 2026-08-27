@@ -1,0 +1,48 @@
+# MySQL 8 para o helpdesk-api, em container.
+#
+# Motivo: nao ha servidor MySQL instalado nesta maquina (o D:\MySQL e o
+# Workbench, que e cliente). Em vez de instalar um servico no Windows, o banco
+# sobe em container - e isso tambem entrega o item "Docker Compose" que o
+# ROADMAP.md deste projeto lista como proximo passo.
+#
+# Subir:   docker compose up -d
+# Logs:    docker compose logs -f mysql
+# Parar:   docker compose down          (os dados ficam no volume)
+# Zerar:   docker compose down -v       (APAGA o banco)
+#
+# Depois de subir, popular o schema a partir do Windows:
+#   npm run db:reset
+#
+# A API roda no host e conecta em localhost:3306, exatamente como o .env ja
+# esta configurado - nada a mudar la.
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: helpdesk-mysql
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      # O .env do projeto usa DB_USER=root com DB_PASSWORD vazio. O container
+      # espelha isso. Serve para desenvolvimento local; em qualquer ambiente
+      # exposto isto vira senha de verdade.
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: helpdesk
+      TZ: America/Sao_Paulo
+    # O mysql2 fala caching_sha2_password sem problema, mas com senha vazia o
+    # plugin antigo evita um caso de borda no primeiro handshake.
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - helpdesk_mysql_data:/var/lib/mysql
+    healthcheck:
+      # Sem isto, "docker compose up -d" volta em 2 segundos e o npm run
+      # db:reset falha: o container existe, mas o MySQL ainda esta subindo.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+volumes:
+  helpdesk_mysql_data:

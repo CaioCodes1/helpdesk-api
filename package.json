@@ -10,9 +10,17 @@
     "db:migrate": "node database/migrate.js",
     "db:seed": "node database/seed.js",
     "db:reset": "node database/migrate.js && node database/seed.js",
-    "test": "node --test"
+    "test": "node --test",
+    "test:automacao": "node automacao/testes/testa-validador.js && node automacao/testes/audita-workflow.js"
   },
-  "keywords": ["helpdesk", "tickets", "express", "mysql", "jwt", "rest-api"],
+  "keywords": [
+    "helpdesk",
+    "tickets",
+    "express",
+    "mysql",
+    "jwt",
+    "rest-api"
+  ],
   "license": "MIT",
   "dependencies": {
     "bcryptjs": "^2.4.3",

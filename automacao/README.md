@@ -289,6 +289,21 @@ vez.
 
 **Roda em uma máquina só**, com o PC ligado. Um VPS barato resolveria.
 
+**As credenciais ficam num node, não no cofre.** A senha do bot e a URL do
+webhook do Discord são editadas no node **Config**, e é por isso que o
+`workflow-triagem-helpdesk.json` de verdade está no `.gitignore` — o que está
+versionado é o `.example.json`, com marcadores no lugar dos segredos.
+
+Funciona e mantém o exemplo legível, mas não é o que se faz em produção. O n8n
+tem um sistema de credenciais próprio: o segredo fica cifrado no banco dele,
+some da tela depois de salvo, não entra no export do workflow e pode ser trocado
+sem editar nó nenhum. Do jeito atual, quem tiver acesso à tela do workflow lê a
+senha do bot, e trocá-la significa editar e republicar o fluxo.
+
+A escolha aqui foi deliberada: num projeto feito para ser **lido**, um node
+`Config` com tudo à vista explica o desenho em cinco segundos. Num projeto para
+rodar valendo, isso vira a primeira coisa a mudar.
+
 **Uma divergência de categoria conhecida:** "como altero o endereço de entrega"
 foi classificado como `Entrega` em vez de `Conta`. Discutível — o título tem a
 palavra "entrega", e um atendente humano poderia fazer o mesmo.
